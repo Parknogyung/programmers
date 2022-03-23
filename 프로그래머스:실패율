@@ -54,36 +54,39 @@ class Solution {
 		ArrayList <Double> rate = new ArrayList<>();
 		int people_total = stages.length;
 		
-		Arrays.sort(stages);
+		Arrays.sort(stages);  // 스테이지를 나열
 		
+        // 스테이지에 멈춰있는 사람 누적시키기
 		for(int i = 0 ; i < stages.length ; i++) {
-			int index = stages[i];
-			if(stages[i] == index) {
-				people_stage[stages[i]-1]++;
-			}
-			else {
-				people_stage[index]++;
+			int index = stages[i];          //멈춰있는 스테이지 인덱스 저장
+			if(stages[i] == index) {        // 해당스테이지에 멈춰있는 사람이 인덱스랑 같다면
+				people_stage[stages[i]-1]++;  //인원 증가
 			}
 			
 		}
 		
-		for(int i = 0 ;  i < people_stage.length ; i++){
-			if(i>N-1) {break;}
+        // 실패율 계산을 ArrayList에 저장시키기
+		for(int i = 0 ;  i < people_stage.length ; i++){  // 스테이지에 멈춰있는 사람을 계산한 배열확인
+			if(i>N-1) {break;}                            // 만약에 마지막 스테이지 까지 통과한사람이 있다면 저장하지 말고 나간다.
+			if(people_stage[i]==0) {                     // 만약에 stage에 멈춰있는 사람이 한명도 없다면
+				rate.add((double)0);                     // 그 해당 스테이지에 0을 넣는다.
+			}
+			else {                                       // stage에 멈춰있는 사람이 있다면 실패율을 계산하여 rate배열에 계산 값을 추가
 			rate.add((double)people_stage[i]/(double)people_total);
 			people_total=people_total-people_stage[i];
-					
+			
+			}
 		}
 		
- 		HashMap <Integer, Double> result = new HashMap<>();
- 		int idx = 0;
+ 		HashMap <Integer, Double> result = new HashMap<>();       //stage를 key에 넣고 실패율을 value에 넣기위해 HashMap 사용
+ 		
  		for(int i = 0 ; i < rate.size() ; i++) {
- 			idx = i+1;
- 			result.put(idx, rate.get(i));
+ 			result.put(i+1, rate.get(i));                     //HashMap에 해당 stage에 rate의 실패율을 저장
  		}
- 		ArrayList<Integer> result2 = new ArrayList<>();
- 		List<Integer> keySetList = new ArrayList<>(result.keySet());
- 		Collections.sort(keySetList, (o2, o1) -> (result.get(o1).compareTo(result.get(o2))));
- 		for(Integer key : keySetList) {
+ 		ArrayList<Integer> result2 = new ArrayList<>();        // value값을 기준으로 내림차순한 key값을 따로 저장하기위해 ArrayList 다시 선언
+ 		List<Integer> keySetList = new ArrayList<>(result.keySet());    //key값만을 불러오기 위해 List선언
+ 		Collections.sort(keySetList, (o2, o1) -> (result.get(o1).compareTo(result.get(o2))));  // value 값을 기준으로 정렬
+ 		for(Integer key : keySetList) {  // 정렬된 키 값을 ArrayList에 저장
  			result2.add(key);
  			}
  		return result2;
