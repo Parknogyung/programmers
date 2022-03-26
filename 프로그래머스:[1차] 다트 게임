@@ -42,21 +42,20 @@ Single(S), Double(D), Triple(T)은 점수마다 하나씩 존재한다.
 결과
 import java.util.*;
 
-public class 스택 {
-	public static void main(String[] args) {
-		String dartResult = "1D2S#10S";
-		
-		int answer = 0 ;
+    public int solution(String dartResult) {
+    int answer = 0 ;
 		int[] an = new int [3];
 		
 		int temp = 0;
 		int idx= 0;
-		String s = "3";
-		int st = 0;
-		
+		int id = -1;
 		
 		for(int i = 0 ; i < dartResult.length(); i++) {
+			if(id == i) {
+				continue;
+			}
 			if(dartResult.charAt(i)=='S') {
+				
 				temp = (int)Math.pow(temp, 1);
 				an[idx] = temp;
 				idx++;
@@ -64,6 +63,7 @@ public class 스택 {
 			
 			else if(dartResult.charAt(i)== 'D') {
 				temp=(int)Math.pow(temp, 2);
+				
 				an[idx] = temp;
 				idx++;
 				
@@ -80,17 +80,23 @@ public class 스택 {
 			else if (dartResult.charAt(i)== '#') {
 				 an[idx-1]*=(-1);
             }
+			else if(Character.isDigit(dartResult.charAt(i))&&Character.isDigit(dartResult.charAt(i+1))) {
+					String st1 =  Character.toString(dartResult.charAt(i)) +Character.toString( dartResult.charAt(i+1));
+					temp = Integer.valueOf(st1);
+					id = i+1;
+				}
 			
 			else {
 				temp=Integer.valueOf(dartResult.charAt(i)-48);
+				
 			}
 			
-		}
-		for(int i = 0 ; i < an.length ; i ++) {
+				 }
+			
+		
+		for(int i = 0 ; i < an.length ; i ++) {			
 			answer+=an[i];
 		}
-		
-	System.out.println(answer);
-	}
-
+        return answer;
+    }
 }
